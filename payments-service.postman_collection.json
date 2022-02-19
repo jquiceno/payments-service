@@ -1,0 +1,147 @@
+{
+	"info": {
+		"_postman_id": "44142b24-0264-4604-b62c-a7f04b2584dd",
+		"name": "Products service",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+	},
+	"item": [
+		{
+			"name": "Get service info",
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "{{HOST_URL}}/info",
+					"host": [
+						"{{HOST_URL}}"
+					],
+					"path": [
+						"info"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Get all products",
+			"request": {
+				"auth": {
+					"type": "bearer",
+					"bearer": [
+						{
+							"key": "token",
+							"value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiJzIiwicm9sZXMiOlsiYWRtaW4iXSwic2NvcGVzIjpbInByb2R1Y3RzLmNyZWF0ZSIsInByb2R1Y3RzLmRlbGV0ZSJdLCJpYXQiOjE2MzkzMzUwNDZ9.Q3BmoCvihZXbw07cp9I_JSyZbGpFVdm2vdG-uJFPhqs",
+							"type": "string"
+						}
+					]
+				},
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n    \"name\": \"Product 1\",\n    \"description\": \"product service\"\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "{{HOST_URL}}",
+					"host": [
+						"{{HOST_URL}}"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Get all products",
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "{{HOST_URL}}",
+					"host": [
+						"{{HOST_URL}}"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Update a product",
+			"request": {
+				"method": "PUT",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n    \"name\": \"Prueba 2\"\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "{{HOST_URL}}/:productId",
+					"host": [
+						"{{HOST_URL}}"
+					],
+					"path": [
+						":productId"
+					],
+					"variable": [
+						{
+							"key": "productId",
+							"value": "61b5f4addde0b1997d2ea999"
+						}
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Delete a product",
+			"request": {
+				"auth": {
+					"type": "bearer",
+					"bearer": [
+						{
+							"key": "token",
+							"value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiJzIiwicm9sZXMiOlsiYWRtaW4iXSwic2NvcGVzIjpbInByb2R1Y3RzLmNyZWF0ZSIsInByb2R1Y3RzLmRlbGV0ZSJdLCJpYXQiOjE2MzkzMzUwNDZ9.Q3BmoCvihZXbw07cp9I_JSyZbGpFVdm2vdG-uJFPhqs",
+							"type": "string"
+						}
+					]
+				},
+				"method": "DELETE",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n    \"name\": \"Prueba 2\"\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "{{HOST_URL}}/:productId",
+					"host": [
+						"{{HOST_URL}}"
+					],
+					"path": [
+						":productId"
+					],
+					"variable": [
+						{
+							"key": "productId",
+							"value": "61b6454631a80bbc96e93843"
+						}
+					]
+				}
+			},
+			"response": []
+		}
+	]
+}

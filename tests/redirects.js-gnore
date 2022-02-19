@@ -1,0 +1,130 @@
+'use strict'
+
+const { ServiceBroker } = require('moleculer')
+const Db = require('../../../lib/Db')
+const ServiceSchema = require('../cms.service')
+const Redirect = require('../models/redirect')
+const { v4: uuid } = require('uuid')
+
+const broker = new ServiceBroker({ logger: false })
+broker.createService(ServiceSchema)
+
+beforeAll(async () => {
+  await Db.connect()
+  broker.start()
+})
+
+afterAll(() => {
+  broker.stop()
+  Db.close()
+})
+
+describe("Test 'cms.getAllRedirects' action", () => {
+  it('Should return an array', async () => {
+    const redirectsList = await broker.call('cms.getAllRedirects')
+    expect(Array.isArray(redirectsList)).toBeTruthy()
+  })
+})
+
+describe("Test 'cms.addRedirect' action", () => {
+  it('Should create a new redirect with simple data', async () => {
+    const newRedirectData = {
+      from: '^/category',
+      to: '^/category-1'
+    }
+
+    const [newRedirect] = await broker.call('cms.addRedirect', newRedirectData)
+
+    expect(newRedirect._id).toMatch(/^[0-9a-fA-F]{24}$/)
+    expect(newRedirect.checked).toBeFalsy()
+    expect(newRedirect.code).toStrictEqual(301)
+    expect(newRedirect.from).toStrictEqual(newRedirectData.from)
+  })
+
+  it('Should create a new redirect with group data', async () => {
+    const newRedirectData = {
+      group: [
+        {
+          from: '^/category',
+          to: '^/category-1'
+        },
+        {
+          from: '^/category2',
+          to: '^/category-2'
+        }
+      ]
+    }
+
+    const newRedirect = await broker.call('cms.addRedirect', newRedirectData)
+
+    expect(Array.isArray(newRedirect)).toBeTruthy()
+    expect(newRedirect.length >= 2).toBe(true)
+  })
+
+  it('Should return an array with error about invalid data', async () => {
+    const newRedirectData = {}
+
+    const [newRedirect] = await broker.call('cms.addRedirect', newRedirectData)
+
+    expect(newRedirect.error).toBeTruthy()
+    expect(newRedirect.error).toMatch(/Redirect is invalid/)
+  })
+
+  it('Should return an array with error about required field from', async () => {
+    const newRedirectData = {
+      to: '^/category-1'
+    }
+
+    const [newRedirect] = await broker.call('cms.addRedirect', newRedirectData)
+
+    expect(newRedirect.error).toBeTruthy()
+    expect(newRedirect.error).toMatch(/is required/)
+  })
+
+  it('Should return an array with error with a conflic', async () => {
+    const newRedirectData = {
+      from: '^/category-1'
+    }
+
+    await broker.call('cms.addRedirect', newRedirectData)
+
+    const [newRedirect] = await broker.call('cms.addRedirect', newRedirectData)
+
+    expect(newRedirect.error).toBeTruthy()
+    expect(newRedirect.error).toMatch(/duplicate key error/)
+  })
+
+  describe("Test 'cms.removeRedirect' action", () => {
+    it('Should return a removed redirect object', async () => {
+      const newRedirectData = {
+        from: `^/${uuid()}`
+      }
+
+      const newRedirect = await Redirect.add(newRedirectData)
+      const removedRedirect = await broker.call('cms.removeRedirect', { id: newRedirect._id })
+
+      const [isRedirect] = await Redirect.getAll({ query: { _id: newRedirect._id } })
+
+      expect(isRedirect).not.toBeDefined()
+      expect(newRedirect._id).toEqual(removedRedirect._id)
+    })
+  })
+
+  describe("Test 'cms.updateRedirect' action", () => {
+    it('Should return an updated redirect id', async () => {
+      const newRedirectData = {
+        from: `^/${uuid()}`
+      }
+
+      const newCode = 302
+
+      const newRedirect = await Redirect.add(newRedirectData)
+      const updatedRedirect = await broker.call('cms.updateRedirect', { id: newRedirect._id, code: newCode })
+
+      const { code } = await new Redirect(updatedRedirect._id).get()
+
+      expect(code).toEqual(newCode)
+      expect(newRedirect._id).toEqual(updatedRedirect._id)
+    })
+  })
+})
