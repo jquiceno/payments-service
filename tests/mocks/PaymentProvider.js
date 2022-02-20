@@ -27,7 +27,8 @@ class PaymentProvider {
       id: uudi(),
       status: 'success',
       amount,
-      method
+      method,
+      provider: this.id
     }
   }
 

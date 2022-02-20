@@ -1,20 +1,22 @@
 {
 	"info": {
-		"_postman_id": "44142b24-0264-4604-b62c-a7f04b2584dd",
-		"name": "Products service",
+		"_postman_id": "aee7115b-defb-4a40-bbb2-c8343602334e",
+		"name": "Payments",
 		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
 	},
 	"item": [
 		{
-			"name": "Get service info",
+			"name": "Get servide info",
 			"request": {
 				"method": "GET",
 				"header": [],
 				"url": {
-					"raw": "{{HOST_URL}}/info",
+					"raw": "http://localhost:3000/info",
+					"protocol": "http",
 					"host": [
-						"{{HOST_URL}}"
+						"localhost"
 					],
+					"port": "3000",
 					"path": [
 						"info"
 					]
@@ -23,60 +25,33 @@
 			"response": []
 		},
 		{
-			"name": "Get all products",
-			"request": {
-				"auth": {
-					"type": "bearer",
-					"bearer": [
-						{
-							"key": "token",
-							"value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiJzIiwicm9sZXMiOlsiYWRtaW4iXSwic2NvcGVzIjpbInByb2R1Y3RzLmNyZWF0ZSIsInByb2R1Y3RzLmRlbGV0ZSJdLCJpYXQiOjE2MzkzMzUwNDZ9.Q3BmoCvihZXbw07cp9I_JSyZbGpFVdm2vdG-uJFPhqs",
-							"type": "string"
-						}
-					]
-				},
-				"method": "POST",
-				"header": [],
-				"body": {
-					"mode": "raw",
-					"raw": "{\n    \"name\": \"Product 1\",\n    \"description\": \"product service\"\n}",
-					"options": {
-						"raw": {
-							"language": "json"
-						}
-					}
-				},
-				"url": {
-					"raw": "{{HOST_URL}}",
-					"host": [
-						"{{HOST_URL}}"
-					]
-				}
-			},
-			"response": []
-		},
-		{
-			"name": "Get all products",
+			"name": "Get all payment methods",
 			"request": {
 				"method": "GET",
 				"header": [],
 				"url": {
-					"raw": "{{HOST_URL}}",
+					"raw": "http://localhost:3000/payments/methods",
+					"protocol": "http",
 					"host": [
-						"{{HOST_URL}}"
+						"localhost"
+					],
+					"port": "3000",
+					"path": [
+						"payments",
+						"methods"
 					]
 				}
 			},
 			"response": []
 		},
 		{
-			"name": "Update a product",
+			"name": "Create a payment",
 			"request": {
-				"method": "PUT",
+				"method": "POST",
 				"header": [],
 				"body": {
 					"mode": "raw",
-					"raw": "{\n    \"name\": \"Prueba 2\"\n}",
+					"raw": "{\n    \"amount\": 20,\n    \"method\": \"paypal\"\n}",
 					"options": {
 						"raw": {
 							"language": "json"
@@ -84,59 +59,41 @@
 					}
 				},
 				"url": {
-					"raw": "{{HOST_URL}}/:productId",
+					"raw": "http://localhost:3000/payments",
+					"protocol": "http",
 					"host": [
-						"{{HOST_URL}}"
+						"localhost"
 					],
+					"port": "3000",
 					"path": [
-						":productId"
-					],
-					"variable": [
-						{
-							"key": "productId",
-							"value": "61b5f4addde0b1997d2ea999"
-						}
+						"payments"
 					]
 				}
 			},
 			"response": []
 		},
 		{
-			"name": "Delete a product",
+			"name": "Reimburse a payment",
 			"request": {
-				"auth": {
-					"type": "bearer",
-					"bearer": [
-						{
-							"key": "token",
-							"value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiJzIiwicm9sZXMiOlsiYWRtaW4iXSwic2NvcGVzIjpbInByb2R1Y3RzLmNyZWF0ZSIsInByb2R1Y3RzLmRlbGV0ZSJdLCJpYXQiOjE2MzkzMzUwNDZ9.Q3BmoCvihZXbw07cp9I_JSyZbGpFVdm2vdG-uJFPhqs",
-							"type": "string"
-						}
-					]
-				},
-				"method": "DELETE",
+				"method": "POST",
 				"header": [],
-				"body": {
-					"mode": "raw",
-					"raw": "{\n    \"name\": \"Prueba 2\"\n}",
-					"options": {
-						"raw": {
-							"language": "json"
-						}
-					}
-				},
 				"url": {
-					"raw": "{{HOST_URL}}/:productId",
+					"raw": "http://localhost:3000/payments/:paymentId/actions/reimburse",
+					"protocol": "http",
 					"host": [
-						"{{HOST_URL}}"
+						"localhost"
 					],
+					"port": "3000",
 					"path": [
-						":productId"
+						"payments",
+						":paymentId",
+						"actions",
+						"reimburse"
 					],
 					"variable": [
 						{
-							"key": "productId",
-							"value": "61b6454631a80bbc96e93843"
+							"key": "paymentId",
+							"value": "b56cae5e-4156-4581-b0f9-50c81a5ce363"
 						}
 					]
 				}

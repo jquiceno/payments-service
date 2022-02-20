@@ -25,9 +25,9 @@ class PaymentsController {
     try {
       const newPayment = this.paymentService.pay({ ...body })
 
-      return res.json({
+      return res.status(201).json({
         data: newPayment,
-        statusCode: 200
+        statusCode: 201
       })
     } catch (error) {
       return next(error)
@@ -39,9 +39,9 @@ class PaymentsController {
       const { id } = params
       const paymentMethods = this.paymentService.reimburse({ id, ...body })
 
-      return res.json({
+      return res.status(201).json({
         data: paymentMethods,
-        statusCode: 200
+        statusCode: 201
       })
     } catch (error) {
       console.log(error)
